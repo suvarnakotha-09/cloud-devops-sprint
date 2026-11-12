@@ -1,0 +1,18 @@
+# Secrets and client-private material
+.env
+.env.*
+!.env.example
+secrets/
+client-private/
+*.pem
+*.pfx
+
+# Terraform local files and state
+.terraform/
+*.tfstate
+*.tfstate.*
+crash.log
+
+# Azure local authentication files
+.azure/
+
