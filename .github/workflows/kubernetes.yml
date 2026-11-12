@@ -1,0 +1,39 @@
+name: Kubernetes Manifest Validation
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "k8s/**"
+      - ".github/workflows/kubernetes.yml"
+
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "k8s/**"
+      - ".github/workflows/kubernetes.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    name: Validate Kubernetes manifests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+
+      - name: Set up kubectl
+        uses: azure/setup-kubectl@v4
+        with:
+          version: v1.37.2
+
+      - name: Validate manifests without a cluster
+        run: |
+          kubectl apply --dry-run=client --validate=strict \
+            -f k8s/base/namespace.yaml \
+            -f k8s/base/api.yaml
