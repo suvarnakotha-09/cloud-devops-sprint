@@ -1,0 +1,7 @@
+resource_group_name = "rg-cloud-devops-sprint-sandbox"
+location            = "swedencentral"
+
+tags = {
+  owner   = "suvarna"
+  purpose = "learning"
+}

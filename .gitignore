@@ -15,6 +15,14 @@ crash.log
 
 # Azure local authentication files
 .azure/
+# Terraform local files
+.terraform/
+*.tfstate
+*.tfstate.*
+crash.log
+crash.*.log
+*.tfvars
+!*.tfvars.example
 
 # Python cache files
 __pycache__/
