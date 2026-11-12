@@ -1,5 +1,8 @@
 # cloud-devops-sprint
 # Cloud DevOps Sprint
+[![Application CI](https://github.com/suvarnakotha-09/cloud-devops-sprint/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/suvarnakotha-09/cloud-devops-sprint/actions/workflows/ci.yml)
+[![Terraform Validation](https://github.com/suvarnakotha-09/cloud-devops-sprint/actions/workflows/terraform.yml/badge.svg?branch=main)](https://github.com/suvarnakotha-09/cloud-devops-sprint/actions/workflows/terraform.yml)
+[![Kubernetes Validation](https://github.com/suvarnakotha-09/cloud-devops-sprint/actions/workflows/kubernetes.yml/badge.svg?branch=main)](https://github.com/suvarnakotha-09/cloud-devops-sprint/actions/workflows/kubernetes.yml)
 
 A hands-on DevOps portfolio project demonstrating a secure local CI/CD workflow for a containerized Python health API deployed to Kubernetes with Kind.
 
