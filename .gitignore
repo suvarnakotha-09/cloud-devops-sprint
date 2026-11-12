@@ -16,3 +16,6 @@ crash.log
 # Azure local authentication files
 .azure/
 
+# Python cache files
+__pycache__/
+*.py[cod]
