@@ -1,0 +1,68 @@
+trigger:
+  branches:
+    include:
+      - main
+
+pr:
+  branches:
+    include:
+      - main
+
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+  imageName: cloud-devops-api
+  terraformVersion: "1.16.5"
+
+stages:
+  - stage: Validate
+    displayName: Validate application and infrastructure
+
+    jobs:
+      - job: Application
+        displayName: Test and build application
+
+        steps:
+          - checkout: self
+
+          - task: UsePythonVersion@0
+            displayName: Use Python
+            inputs:
+              versionSpec: "3.x"
+
+          - bash: python -m unittest discover -s tests -v
+            displayName: Run API tests
+
+          - bash: bash -n scripts/deploy-local.sh
+            displayName: Validate deployment script
+
+          - task: Docker@2
+            displayName: Build API image
+            inputs:
+              command: build
+              repository: $(imageName)
+              Dockerfile: app/Dockerfile
+              buildContext: app
+              tags: |
+                $(Build.BuildId)
+
+      - job: Terraform
+        displayName: Validate Terraform
+
+        steps:
+          - checkout: self
+
+          - task: TerraformInstaller@1
+            displayName: Install Terraform
+            inputs:
+              terraformVersion: $(terraformVersion)
+
+          - bash: terraform fmt -check -recursive infra/terraform
+            displayName: Check Terraform formatting
+
+          - bash: |
+              terraform init -backend=false -input=false
+              terraform validate -no-color
+            displayName: Validate Terraform
+            workingDirectory: infra/terraform/environments/sandbox
