@@ -27,3 +27,9 @@ Developer → GitHub → GitHub Actions CI
                     └── Build Docker image
 
 Developer → Docker → Kind Kubernetes cluster → cloud-devops-api pods
+## Observability
+
+The API exposes Prometheus-compatible request metrics at:
+
+```text
+GET /metrics
