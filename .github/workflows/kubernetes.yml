@@ -39,4 +39,5 @@ jobs:
             -strict \
             -summary \
             k8s/base/namespace.yaml \
-            k8s/base/api.yaml
+            k8s/base/api.yaml \
+            k8s/monitoring/prometheus.yaml
