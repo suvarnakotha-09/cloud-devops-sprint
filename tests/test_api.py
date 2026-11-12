@@ -26,7 +26,7 @@ class ApiTests(unittest.TestCase):
         cls.thread.join()
         cls.server.server_close()
 
-    def request(self, path):
+    def request_json(self, path):
         connection = HTTPConnection("127.0.0.1", self.port, timeout=2)
         connection.request("GET", path)
         response = connection.getresponse()
@@ -34,14 +34,34 @@ class ApiTests(unittest.TestCase):
         connection.close()
         return response.status, body
 
+    def request_text(self, path):
+        connection = HTTPConnection("127.0.0.1", self.port, timeout=2)
+        connection.request("GET", path)
+        response = connection.getresponse()
+        content_type = response.getheader("Content-Type")
+        body = response.read().decode("utf-8")
+        connection.close()
+        return response.status, content_type, body
+
     def test_health_endpoint(self):
-        status, body = self.request("/health")
+        status, body = self.request_json("/health")
         self.assertEqual(status, 200)
         self.assertEqual(body["status"], "ok")
         self.assertEqual(body["service"], "cloud-devops-api")
 
+    def test_metrics_endpoint(self):
+        status, content_type, body = self.request_text("/metrics")
+        self.assertEqual(status, 200)
+        self.assertIn("text/plain", content_type)
+        self.assertIn("# HELP cloud_devops_api_requests_total", body)
+        self.assertIn("# TYPE cloud_devops_api_requests_total counter", body)
+        self.assertIn(
+            'cloud_devops_api_requests_total{route="metrics",status="200"}',
+            body,
+        )
+
     def test_unknown_route_returns_not_found(self):
-        status, body = self.request("/missing")
+        status, body = self.request_json("/missing")
         self.assertEqual(status, 404)
         self.assertEqual(body["error"], "not found")
 
